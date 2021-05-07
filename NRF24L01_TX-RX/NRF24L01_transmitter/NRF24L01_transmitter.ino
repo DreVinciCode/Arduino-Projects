@@ -43,7 +43,7 @@ RF24 radio(7, 8); // CE, CSN
 // Let these addresses be used for the pair
 uint8_t address[][6] = {"Dre01", "Dre02"};
 
-int ledpin = 3; //Using LED to indicate a transmitted message
+int ledpin = 4; //Using LED to indicate a transmitted message
 
 void setup() 
 {
@@ -55,7 +55,7 @@ void setup()
   // initialize the transceiver on the SPI bus
   if (!radio.begin()) 
   {
-    Serial.println(F("radio hardware is not responding!!"));
+    Serial.println(F("Radio hardware is not responding. Possibly not recieving enough power..."));
     while(1){} // hold in infinite loop
   }
   Serial.println("SimpleTx Starting");
@@ -71,7 +71,7 @@ void setup()
 
 void loop() 
 {
-  const char text[] = "Hello World1!";
+  const char text[] = "Hello from GroveBoard!";
   radio.write(&text, sizeof(text));
   digitalWrite(ledpin, HIGH);
   delay(100);
