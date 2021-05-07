@@ -21,7 +21,6 @@
  * IRO - N/A
  * 
  * Arduino Nano
- * If using nano, you might have to switch processor to ATmega328P (Old Bootloader)
  * CE  - 
  * CSN -
  * SCK - 13
@@ -38,12 +37,13 @@
  * ==============
  */
 
-RF24 radio(7, 8); // CE, CSN
+RF24 radio(7, 8); //Assign pins CE and CSN on the NRF24L01 to the Arduino Board
+char data[50] = "";
 
-// Let these addresses be used for the pair
+// Set the address
 uint8_t address[][6] = {"Dre01", "Dre02"};
 
-int ledpin = 3; //Using LED to indicate a transmitted message
+int ledpin = 2; //Using LED to indicate a received message
 
 void setup() 
 {
@@ -55,27 +55,30 @@ void setup()
   // initialize the transceiver on the SPI bus
   if (!radio.begin()) 
   {
-    Serial.println(F("radio hardware is not responding!!"));
+    Serial.println(F("Radio hardware is not responding. Possibly not receiving enough power..."));
     while(1){} // hold in infinite loop
   }
-  Serial.println("SimpleTx Starting");
+  Serial.println("SimpleRx Starting");
 
-  radio.openWritingPipe(address[0]);
+  radio.openReadingPipe(1,address[0]);
   radio.setPALevel(RF24_PA_MIN);
-  radio.stopListening();
+  radio.startListening();
   digitalWrite(ledpin, LOW);
-
+  
   //printf_begin();             // needed only once for printing details
   //radio.printDetails();       // (smaller) function that prints raw register values
 }
 
 void loop() 
 {
-  const char text[] = "Hello World1!";
-  radio.write(&text, sizeof(text));
-  digitalWrite(ledpin, HIGH);
-  delay(100);
-  digitalWrite(ledpin, LOW);
-  Serial.println(text);  
-  delay(1000);
+  uint8_t pipe;
+  if (radio.available(&pipe)) 
+  {
+    char text[32] = "";
+    radio.read(&text, sizeof(text));
+    digitalWrite(ledpin, HIGH);
+    delay(100);
+    digitalWrite(ledpin, LOW);
+    Serial.println(text);
+  }
 }
