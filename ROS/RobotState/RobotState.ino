@@ -37,6 +37,9 @@ void setup()
   pinMode(13, OUTPUT);
   nh.initNode();
   nh.subscribe(colorSub);
+
+  RGB_color(255, 255, 255); // White
+
 }
 
 void loop()
