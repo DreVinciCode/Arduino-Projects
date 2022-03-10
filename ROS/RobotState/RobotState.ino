@@ -38,7 +38,7 @@ void setup()
   nh.initNode();
   nh.subscribe(colorSub);
 
-  RGB_color(255, 255, 255); // White
+  RGB_color(255, 0, 0); // Start out red
 
 }
 
