@@ -10,11 +10,9 @@ Tufts University
 #include <std_msgs/ColorRGBA.h>
 
 #define LED_PIN 2
-#define NUM_LEDS 60
-#define SCROLL_SPEED 50
+#define NUM_LEDS 58
 
 CRGB leds[NUM_LEDS];
-CRGBArray<NUM_LEDS> led_array;
 
 ros::NodeHandle  nh;
 
@@ -79,7 +77,6 @@ void RGBA_action(float red_light_value, float green_light_value, float blue_ligh
       break;
       
     case 1: //comet effect
-      
       RGB_change_comet(red_light_value,green_light_value,blue_light_value);
       break;
       
