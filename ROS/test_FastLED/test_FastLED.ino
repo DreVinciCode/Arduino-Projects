@@ -1,4 +1,4 @@
-/*****************************
+\/*****************************
 arduino_ros_robotstate_LED_STIRP.ino
 SENSAR
 Andre Cleaver
@@ -43,6 +43,7 @@ void Diminish()
   {
     leds[i] = CRGB(255, 0,0);
     FastLED.setBrightness(i);
+    FastLED.show();
   }
   
 }
@@ -73,7 +74,13 @@ void RGB_Single_Ring(float red_light_value, float green_light_value, float blue_
    }
 }   
 
- 
+void test()
+{
+    leds[0].setRGB(255,255,255);
+    FastLED.setBrightness(255);
+    FastLED.show();
+
+}
 
 void setup()
 {
@@ -81,9 +88,12 @@ void setup()
   FastLED.setMaxPowerInVoltsAndMilliamps(5, 500);
   FastLED.clear();
   FastLED.show();
+
+  test();
 }
+
 
 void loop()
 {  
-  Diminish();
+
 }
