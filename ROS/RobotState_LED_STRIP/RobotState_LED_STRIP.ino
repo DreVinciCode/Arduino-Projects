@@ -3,11 +3,13 @@ arduino_ros_robotstate_LED_STIRP.ino
 SENSAR
 Andre Cleaver
 Tufts University
+April 12th, 2022
 *****************************/
 
 #include <FastLED.h>
 #include <ros.h>
 #include <std_msgs/ColorRGBA.h>
+#include <sensar_ros/SingleColorLED.h>
 
 #define LED_PIN 2
 #define NUM_LEDS 58
@@ -97,6 +99,7 @@ void RGBLEDcolorMessageReceiver( const std_msgs::ColorRGBA& color_msg)
    RGBA_action(color_msg.r, color_msg.g, color_msg.b, color_msg.a);
    messageRecieved = true;
 }    
+
 ros::Subscriber<std_msgs::ColorRGBA> colorSub("/SENSAR/robotstate_color", RGBLEDcolorMessageReceiver);
 
 void setup()
