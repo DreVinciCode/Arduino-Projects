@@ -12,7 +12,6 @@
 ros::NodeHandle  nh;
 
 sensar_ros::SingleColorLED message;
-//std_msgs::Int16MultiArray std_msg;
 ros::Publisher SingleColorLED("singleColorLED", &message);
 
 void publishMessage()
