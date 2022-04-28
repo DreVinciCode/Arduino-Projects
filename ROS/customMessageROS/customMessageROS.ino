@@ -8,7 +8,6 @@
  */
 
 #include <ros.h>
-#include <std_msgs/Int16.h>
 #include <std_msgs/Int16MultiArray.h>
 #include <std_msgs/ColorRGBA.h>
 #include <sensar_ros/SingleColorLED.h>
@@ -21,11 +20,7 @@ ros::Publisher SingleColorLED("singleColorLED", &message);
 void publishMessage()
 {
   
-  int value[5] = {1,2,4,8,16};
-  std_msgs::Int16MultiArray testarray;
-  testarray.data = value;
-  testarray.data_length = 5;
-  
+  int ledarray[5] = {1,2,4,8,16};  
   std_msgs::ColorRGBA ledColor;
   
   ledColor.r = 255;
@@ -34,9 +29,9 @@ void publishMessage()
 
   message.color = ledColor;
   message.repeating = true; 
-  message.duration = 5.2;
-  message.leds = value;
-  message.leds_length = 5;
+  message.duration = 5.2;  //See about std_msgs/duration type
+  message.leds = ledarray;
+  message.leds_length = sizeof(ledarray)/ sizeof(int);
   
 
   SingleColorLED.publish(&message);
