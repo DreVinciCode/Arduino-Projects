@@ -18,7 +18,7 @@ namespace sensar_ros
       typedef float _duration_type;
       _duration_type duration;
       uint32_t leds_length;
-      typedef int8_t _leds_type;
+      typedef int16_t _leds_type;
       _leds_type st_leds;
       _leds_type * leds;
       typedef bool _repeating_type;
@@ -44,11 +44,12 @@ namespace sensar_ros
       offset += sizeof(this->leds_length);
       for( uint32_t i = 0; i < leds_length; i++){
       union {
-        int8_t real;
-        uint8_t base;
+        int16_t real;
+        uint16_t base;
       } u_ledsi;
       u_ledsi.real = this->leds[i];
       *(outbuffer + offset + 0) = (u_ledsi.base >> (8 * 0)) & 0xFF;
+      *(outbuffer + offset + 1) = (u_ledsi.base >> (8 * 1)) & 0xFF;
       offset += sizeof(this->leds[i]);
       }
       union {
@@ -72,18 +73,19 @@ namespace sensar_ros
       leds_lengthT |= ((uint32_t) (*(inbuffer + offset + 3))) << (8 * 3); 
       offset += sizeof(this->leds_length);
       if(leds_lengthT > leds_length)
-        this->leds = (int8_t*)realloc(this->leds, leds_lengthT * sizeof(int8_t));
+        this->leds = (int16_t*)realloc(this->leds, leds_lengthT * sizeof(int16_t));
       leds_length = leds_lengthT;
       for( uint32_t i = 0; i < leds_length; i++){
       union {
-        int8_t real;
-        uint8_t base;
+        int16_t real;
+        uint16_t base;
       } u_st_leds;
       u_st_leds.base = 0;
-      u_st_leds.base |= ((uint8_t) (*(inbuffer + offset + 0))) << (8 * 0);
+      u_st_leds.base |= ((uint16_t) (*(inbuffer + offset + 0))) << (8 * 0);
+      u_st_leds.base |= ((uint16_t) (*(inbuffer + offset + 1))) << (8 * 1);
       this->st_leds = u_st_leds.real;
       offset += sizeof(this->st_leds);
-        memcpy( &(this->leds[i]), &(this->st_leds), sizeof(int8_t));
+        memcpy( &(this->leds[i]), &(this->st_leds), sizeof(int16_t));
       }
       union {
         bool real;
@@ -97,7 +99,7 @@ namespace sensar_ros
     }
 
     virtual const char * getType() override { return "sensar_ros/SingleColorLED"; };
-    virtual const char * getMD5() override { return "886abec1415f9b1ed58875314b7e015b"; };
+    virtual const char * getMD5() override { return "f74bbd685df67536dfc23035828fb700"; };
 
   };
 
