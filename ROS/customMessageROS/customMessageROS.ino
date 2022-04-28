@@ -1,6 +1,10 @@
 /*
- * rosserial PubSub Example
- * Prints "hello world!" and toggles led
+ * Andre Cleaver
+ * LED Strip PRoject
+ * Tufts University
+ * April 27, 2022
+ * 
+ * Example of ROS sub and pub with custom message
  */
 
 #include <ros.h>
@@ -38,12 +42,19 @@ void publishMessage()
   SingleColorLED.publish(&message);
 }
 
+void singleColorLEDMessageReceiver(const sensar_ros::SingleColorLED led_msg)
+{
+    digitalWrite(13, HIGH-digitalRead(13));   // blink the led
+}
+
+ros::Subscriber<sensar_ros::SingleColorLED> ledSub("singleColorLED",  singleColorLEDMessageReceiver);
 
 void setup()
 {
   pinMode(13, OUTPUT);
   nh.initNode();
   nh.advertise(SingleColorLED);
+  nh.subscribe(ledSub);
 }
 
 void loop()
