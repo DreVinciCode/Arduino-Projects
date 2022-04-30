@@ -6,44 +6,36 @@
  */
 
 #include <ros.h>
-#include <std_msgs/String.h>
-#include <std_msgs/Bool.h>
 #include <std_msgs/Empty.h>
 
 ros::NodeHandle  nh;
 
+int Relay1 = 10;
+
 void EmptyMessageCallback( const std_msgs::Empty& toggle_msg)
 {
-  digitalWrite(13, HIGH-digitalRead(13));   // blink the led
+  digitalWrite(Relay1, HIGH-digitalRead(Relay1));   // Toggle Relay
 }
 
-void messageCb( const std_msgs::Bool& toggle_msg)
-{
-  digitalWrite(13, HIGH-digitalRead(13));   // blink the led
-}
+ros::Subscriber<std_msgs::Empty> Empty_Sub1("AR_Device1", EmptyMessageCallback);
+//ros::Subscriber<std_msgs::Empty> Empty_Sub2("AR_Device2", EmptyMessageCallback);
+//ros::Subscriber<std_msgs::Empty> Empty_Sub3("AR_Device3", EmptyMessageCallback);
 
-ros::Subscriber<std_msgs::Bool> sub("toggle_led1", messageCb);
-ros::Subscriber<std_msgs::Empty> Empty_Sub("empty_1", EmptyMessageCallback);
-
-
-std_msgs::String str_msg;
-ros::Publisher chatter("chatter1", &str_msg);
-
-char hello[13] = "hello world!";
 
 void setup()
 {
-  pinMode(13, OUTPUT);
+  pinMode(Relay1, OUTPUT);
   nh.initNode();
-  nh.advertise(chatter);
-  nh.subscribe(sub);
-  nh.subscribe(Empty_Sub);
+  nh.subscribe(Empty_Sub1);
+  //nh.subscribe(Empty_Sub2);
+  //nh.subscribe(Empty_Sub3);
+
+  digitalWrite(Relay1, LOW);
+
 }
 
 void loop()
 {
-  str_msg.data = hello;
-  chatter.publish( &str_msg );
   nh.spinOnce();
   delay(500);
 }
