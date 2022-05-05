@@ -8,10 +8,10 @@ int Relay = 4;
 
 RTC_DS3231 rtc;
 
-const int OnHour = 10;
-const int OnMin = 03;
-const int OffHour = 10;
-const int OffMin = 04;
+const int OnHour = 06;
+const int OnMin = 30;
+const int OffHour = 22;
+const int OffMin = 30;
 
 char daysOfTheWeek[7][12] = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
 
@@ -20,7 +20,6 @@ char daysOfTheWeek[7][12] = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursd
 #define OLED_RESET 4
 
 Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
-
 
 void setup() 
 {
@@ -63,7 +62,6 @@ void draw_text(byte x_pos, byte y_pos, char *text, byte text_size)
 
 void loop() 
 {
-  //t = rtc.getTime();
   DateTime now = rtc.now();
   display.setTextSize(1);
   display.setCursor(0,0);
@@ -98,18 +96,15 @@ void loop()
   display.setCursor(82,25);
   display.print(rtc.getTemperature());
   display.display();
-
   
-  if(t.hour == OnHour && t.min == OnMin)
+  if(thisHour == OnHour && thisMin == OnMin)
   {
     digitalWrite(Relay,HIGH);
     Serial.println("LIGHT ON");  
   }
-  else if(t.hour == OffHour && t.min == OffMin)
+  else if(thisHour == OffHour && thisMin == OffMin)
   {
     digitalWrite(Relay,LOW);
     Serial.println("LIGHT OFF");
   }
-    
-    
 }
