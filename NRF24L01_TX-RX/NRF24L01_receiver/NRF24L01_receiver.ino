@@ -43,7 +43,7 @@ char data[50] = "";
 // Set the address
 uint8_t address[][6] = {"Dre01", "Dre02"};
 
-int ledpin = 2; //Using LED to indicate a received message
+int ledpin = 4; //Using LED to indicate a received message
 
 void setup() 
 {
@@ -63,6 +63,7 @@ void setup()
   radio.openReadingPipe(1,address[0]);
   radio.setPALevel(RF24_PA_MIN);
   radio.startListening();
+  pinMode(ledpin, OUTPUT);
   digitalWrite(ledpin, LOW);
   
   //printf_begin();             // needed only once for printing details
@@ -76,9 +77,7 @@ void loop()
   {
     char text[32] = "";
     radio.read(&text, sizeof(text));
-    digitalWrite(ledpin, HIGH);
-    delay(100);
-    digitalWrite(ledpin, LOW);
+    digitalWrite(ledpin, HIGH-digitalRead(ledpin));   // Toggle Relay
     Serial.println(text);
   }
 }
